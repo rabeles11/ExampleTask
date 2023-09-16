@@ -8,11 +8,11 @@ async function fetchData() {
     const response = await axios.get(url);
     if (response.status === 200) {
       const estates = response.data._embedded.estates;
-      // Save data using Sequelize
       for (const estate of estates) {
         const name = estate.name;
         const id = estate.hash_id;
-        const images = estate._links.images || [];
+        const images = JSON.stringify(estate._links.images) || [];
+        console.log(images);
         try {
           await Estates.create({
             id,

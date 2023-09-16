@@ -14,7 +14,7 @@ const Estates = sequelize.define(
       allowNull: false,
     },
     imageURLs: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.STRING(5000),
       allowNull: false,
     },
     deletedAt: {
