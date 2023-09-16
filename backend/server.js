@@ -12,7 +12,7 @@ connectToDatabase();
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://www.localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://www.localhost:8080");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
