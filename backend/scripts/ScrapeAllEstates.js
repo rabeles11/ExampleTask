@@ -1,4 +1,4 @@
-import Estates from "../models/Estates";
+import Estates from "../models/Estates.js";
 import axios from "axios";
 
 async function fetchData() {
