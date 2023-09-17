@@ -10,7 +10,8 @@ services:
       - PGDATABASE=postgres
       - PGPASSWORD=postgres
       - PGPORT=5432
-
+    depends_on:
+      - db
   db:
     ports:
       - 5432:5432
@@ -19,6 +20,8 @@ services:
       POSTGRES_USERNAME: "postgres"
       POSTGRES_PASSWORD: "postgres"
       POSTGRES_DB: postgres
+    volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d
   app:
     build: ./frontend/LuxonisFrontend
     ports:

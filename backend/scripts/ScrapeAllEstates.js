@@ -12,7 +12,6 @@ async function fetchData() {
         const name = estate.name;
         const id = estate.hash_id;
         const images = JSON.stringify(estate._links.images) || [];
-        console.log(images);
         try {
           await Estates.create({
             id,
