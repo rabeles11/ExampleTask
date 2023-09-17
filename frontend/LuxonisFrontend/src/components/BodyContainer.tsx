@@ -8,6 +8,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 const BodyWrapper = styled.div`
   background-color: smoke-white;
   margin: 0 auto;
+  min-height: 80vh;
   padding: 0vw 7vw;
 `;
 
@@ -20,6 +21,20 @@ const CardWrapper = styled.div`
   gap: 3vw;
 `;
 
+const StyledSpan = styled.div`
+  font-size: 55px;
+  padding-top: 40vh;
+  color: black;
+`;
+
+const LoadingSpan = styled(StyledSpan)``;
+const ErrorSpan = styled(StyledSpan)``;
+
+const PageTextContainer = styled.div`
+  font-size: 25px;
+  color: black;
+`;
+
 async function fetchEstates(page: number) {
   const response = await api.getTokensPagination(40, page);
   return response;
@@ -29,19 +44,22 @@ function BodyContainer() {
   const [page, setPage] = useState(0);
   const queryClient = useQueryClient();
 
-  const { data, isFetching, isPreviousData } = useQuery({
-    queryKey: ["projects", page],
+  const { status, data, error, isFetching, isPreviousData } = useQuery({
+    queryKey: ["estates", page],
     queryFn: () => fetchEstates(page),
     keepPreviousData: true,
-    staleTime: 5000,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
 
   const cardArray = new Array(data?.data.estates.length).fill(null);
 
   useEffect(() => {
-    if (!isPreviousData && data?.data.hasMore) {
+    console.log(isPreviousData);
+    console.log(error);
+    if (isPreviousData && data?.data.hasMore) {
       queryClient.prefetchQuery({
-        queryKey: ["projects", page + 1],
+        queryKey: ["estates", page + 1],
         queryFn: () => fetchEstates(page + 1),
       });
     }
@@ -49,33 +67,39 @@ function BodyContainer() {
   return (
     <BodyWrapper>
       {isFetching ? (
-        <span> Loading...</span>
+        <LoadingSpan> Loading...</LoadingSpan>
+      ) : status === "error" ? (
+        <ErrorSpan>Sorry we were unable to get data</ErrorSpan>
       ) : (
-        <CardWrapper>
-          {cardArray.map((_, index) => (
-            <Card
-              headline={data?.data.estates[index].title}
-              images={JSON.parse(data?.data.estates[index]?.imageURLs || "[]")}
-              key={index}
-            />
-          ))}
-        </CardWrapper>
+        <>
+          <CardWrapper>
+            {cardArray.map((_, index) => (
+              <Card
+                headline={data?.data.estates[index].title}
+                images={JSON.parse(
+                  data?.data.estates[index]?.imageURLs || "[]"
+                )}
+                key={index}
+              />
+            ))}
+          </CardWrapper>
+          <PageTextContainer>Current Page: {page + 1}</PageTextContainer>
+          <button
+            onClick={() => setPage((old) => Math.max(old - 1, 0))}
+            disabled={page === 0}
+          >
+            Previous Page
+          </button>{" "}
+          <button
+            onClick={() => {
+              setPage((old) => (data?.data.hasMore ? old + 1 : old));
+            }}
+            disabled={isPreviousData || !data?.data.hasMore}
+          >
+            Next Page
+          </button>
+        </>
       )}{" "}
-      <div>Current Page: {page + 1}</div>
-      <button
-        onClick={() => setPage((old) => Math.max(old - 1, 0))}
-        disabled={page === 0}
-      >
-        Previous Page
-      </button>{" "}
-      <button
-        onClick={() => {
-          setPage((old) => (data?.data.hasMore ? old + 1 : old));
-        }}
-        disabled={isPreviousData || !data?.data.hasMore}
-      >
-        Next Page
-      </button>
     </BodyWrapper>
   );
 }
