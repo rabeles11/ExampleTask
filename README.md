@@ -11,9 +11,9 @@ Scrape the first 500 items (title, image url) from sreality.cz (flats, sell - yo
 
 **Project structure**
 
-- **backend**
+- **backend** http://localhost:5000
   - Express Node server , with ORM via sequelize lib with controllers
-- **frontend**
+- **frontend** http://localhost:8080
   - React-app builded with VITE, written in Typescript with ESlint
 - **init-scripts**
   - Default script, that helps docker to create initial table scheme
