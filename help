@@ -1,4 +1,0 @@
-API LINK
-https://www.sreality.cz/api/cs/v2/estates?category_main_cb=1&category_type_cb=1&page=0&per_page=500
-
-curl -G "http://localhost:5000/estate" --data-urlencode "page=1" --data-urlencode "perPage=10"
