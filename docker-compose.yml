@@ -23,6 +23,6 @@ services:
     volumes:
       - ./init-scripts:/docker-entrypoint-initdb.d
   app:
-    build: ./frontend/LuxonisFrontend
+    build: ./frontend
     ports:
       - 8080:8080
