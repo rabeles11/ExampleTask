@@ -1,4 +1,4 @@
-# Luxonis task
+# Example task
 
 **Assignment**
 
